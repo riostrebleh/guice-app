@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>guice-app</context-root>
+</jboss-web>
