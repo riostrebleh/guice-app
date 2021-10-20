@@ -1,10 +1,15 @@
 package br.helbertrios.guice.app.servlet;
 
+import br.helbertrios.guice.app.arch.ActionExecutor;
+import br.helbertrios.guice.app.bean.RequestInfo;
 import br.helbertrios.guice.app.bean.Simple;
 import br.helbertrios.guice.app.provider.ProviderRequestInfo;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.google.inject.servlet.RequestScoper;
+import com.google.inject.servlet.ServletScopes;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,15 +30,25 @@ public class GuiceServlet extends HttpServlet {
     @Inject
    private com.google.inject.Provider<ProviderRequestInfo> scope;
 
+
+
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {
+
         ProviderRequestInfo providerRequestInfo = scope.get();
+        RequestInfo requestInfo = providerRequestInfo.get();
+
+        ActionExecutor actionExecutor = injector.getInstance(ActionExecutor.class);
+        actionExecutor.executaAcao(requestInfo.getRequestAction().getClassName(), requestInfo.getRequestAction().getMehodName());
+
         PrintWriter writer = resp.getWriter();
         writer.println("<html><title>Guice Application</title><body>");
         writer.println("<h1>Servlet Guice</h1>");
         writer.println("<h3>"+simple.getCode()+"</h3>");
         writer.println("<h3> User: "+providerRequestInfo.get().getRequestUser().getName()+"</h3>");
         writer.println("</body></html>");
+
     }
 
 
