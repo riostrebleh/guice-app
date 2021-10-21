@@ -7,8 +7,6 @@ import br.helbertrios.guice.app.provider.ProviderRequestInfo;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import com.google.inject.servlet.RequestScoper;
-import com.google.inject.servlet.ServletScopes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,20 +19,18 @@ import java.io.PrintWriter;
 @Singleton
 public class GuiceServlet extends HttpServlet {
 
-   @Inject
-   private Simple simple;
+    @Inject
+    private Simple simple;
 
     @Inject
     private Injector injector;
 
     @Inject
-   private com.google.inject.Provider<ProviderRequestInfo> scope;
-
-
+    private com.google.inject.Provider<ProviderRequestInfo> scope;
 
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         ProviderRequestInfo providerRequestInfo = scope.get();
         RequestInfo requestInfo = providerRequestInfo.get();
@@ -45,12 +41,11 @@ public class GuiceServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         writer.println("<html><title>Guice Application</title><body>");
         writer.println("<h1>Servlet Guice</h1>");
-        writer.println("<h3>"+simple.getCode()+"</h3>");
-        writer.println("<h3> User: "+providerRequestInfo.get().getRequestUser().getName()+"</h3>");
+        writer.println("<h3>" + simple.getCode() + "</h3>");
+        writer.println("<h3> User: " + providerRequestInfo.get().getRequestUser().getName() + "</h3>");
         writer.println("</body></html>");
 
     }
-
 
 
 }

@@ -3,8 +3,8 @@ package br.helbertrios.guice.app.arch;
 import br.helbertrios.guice.app.bean.Feature;
 import br.helbertrios.guice.app.bean.RequestAction;
 import br.helbertrios.guice.app.bean.RequestInfo;
-import br.helbertrios.guice.app.provider.ProviderRequestInfo;
 import br.helbertrios.guice.app.rabbit.RabbitMQMock;
+import br.helbertrios.guice.app.rabbit.RabbitMQMockOutsideRequest;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.servlet.RequestScoper;
@@ -15,10 +15,10 @@ import javax.servlet.ServletContext;
 
 public class ActionExecutor {
 
+    private static final RabbitMQMock rabbitMQMock = new RabbitMQMock();
+    private static final RabbitMQMockOutsideRequest rabbitMQMockOutsideRequest = new RabbitMQMockOutsideRequest();
     private final Injector injector;
     private final ServletContext context;
-
-    private static RabbitMQMock rabbitMQMock = new RabbitMQMock();
 
     @Inject
     public ActionExecutor(Injector injector, ServletContext context) {
@@ -28,7 +28,7 @@ public class ActionExecutor {
     }
 
     public Object executaAcao(String className, String methodName) {
-        final RequestScoper requestScoper = ServletScopes.transferRequest();
+
         RequestInfo requestInfo = injector.getInstance(RequestInfo.class);
         RequestAction requestAction = new RequestAction();
         requestAction.setClassName(className);
@@ -37,9 +37,12 @@ public class ActionExecutor {
 
         boolean isLongRunning = true;
 
-        if(isLongRunning){
-
-            rabbitMQMock.put(injector, "{}", requestAction, requestScoper);
+        if (isLongRunning) {
+            final RequestScoper requestScoper = ServletScopes.transferRequest();
+            // rabbitMQMock.put(injector, "{}", requestAction, requestScoper);
+            rabbitMQMockOutsideRequest.put(injector, "{}", requestAction);
+            //             TesteCallable testeCallable = new TesteCallable(new Req(injector, "{}", requestAction, requestScoper));
+            //            ServletScopes.transferRequest(testeCallable);
         }
 
         Feature feature = injector.getInstance(Feature.class);

@@ -5,7 +5,6 @@ import br.helbertrios.guice.app.dao.DAO;
 import br.helbertrios.guice.app.dao.DAOInjector;
 import br.helbertrios.guice.app.provider.ProviderRequestInfo;
 import br.helbertrios.guice.app.provider.ProviderRequestUser;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.servlet.RequestScoped;
 

@@ -4,14 +4,14 @@ import com.google.inject.Inject;
 
 public class TextEditor {
 
-    private SpellChecker spellChecker;
+    private final SpellChecker spellChecker;
 
     @Inject
     public TextEditor(SpellChecker spellChecker) {
         this.spellChecker = spellChecker;
     }
 
-    public String makeSpellCheck(){
+    public String makeSpellCheck() {
         return spellChecker.checkSpelling();
     }
 

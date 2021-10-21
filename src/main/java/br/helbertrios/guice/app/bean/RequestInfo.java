@@ -3,18 +3,18 @@ package br.helbertrios.guice.app.bean;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RequestInfo  {
+public class RequestInfo {
 
+    private final Set<AutoCloseable> setDAOs = new HashSet<>(3);
     private RequestUser requestUser;
     private RequestAction requestAction;
     private String tokenID;
     private Integer sequencialNumber;
 
-    private final Set<AutoCloseable> setDAOs = new HashSet<>(3);;
-
     public RequestInfo() {
 
     }
+
     public RequestInfo(RequestUser requestUser, RequestAction requestAction, String tokenID, Integer sequencialNumber) {
         this.requestUser = requestUser;
         this.requestAction = requestAction;

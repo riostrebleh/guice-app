@@ -9,7 +9,6 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import javax.servlet.*;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -20,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GuiceRequestFilter implements Filter {
 
     private static int sequencial = 0;
-    private static Map<String, String> tokens = new ConcurrentHashMap<>();
+    private static final Map<String, String> tokens = new ConcurrentHashMap<>();
 
-   @Inject
+    @Inject
     private Injector injector;
 
 
@@ -58,7 +57,7 @@ public class GuiceRequestFilter implements Filter {
             ProviderRequestInfo providerRequestInfo = injector.getInstance(ProviderRequestInfo.class);
             RequestInfo requestInfo = new RequestInfo(requestUser, requestAction, tokenID, ++sequencial);
             providerRequestInfo.set(requestInfo);
-            return  requestInfo;
+            return requestInfo;
         } else {
             RequestUser requestUser = new RequestUser();
             requestUser.setId("0");
@@ -81,7 +80,7 @@ public class GuiceRequestFilter implements Filter {
         return null;
     }
 
-    protected boolean validRequest(ServletRequest req,  PrintWriter writer) {
+    protected boolean validRequest(ServletRequest req, PrintWriter writer) {
         boolean result = true;
         if (req.getParameter("id") == null) {
             writer.println("<BR><span>Parameter id is required.</span>");

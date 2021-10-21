@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 
 public class DAO implements AutoCloseable {
 
-    private RequestInfo requestInfo;
+    private final RequestInfo requestInfo;
 
     @Inject
     public DAO(RequestInfo requestInfo) {
