@@ -4,6 +4,7 @@ import br.helbertrios.guice.app.bean.Feature;
 import br.helbertrios.guice.app.bean.RequestAction;
 import br.helbertrios.guice.app.bean.RequestInfo;
 import br.helbertrios.guice.app.rabbit.RabbitMQMock;
+import br.helbertrios.guice.app.rabbit.RabbitMQMockFakeRequest;
 import br.helbertrios.guice.app.rabbit.RabbitMQMockOutsideRequest;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -17,6 +18,7 @@ public class ActionExecutor {
 
     private static final RabbitMQMock rabbitMQMock = new RabbitMQMock();
     private static final RabbitMQMockOutsideRequest rabbitMQMockOutsideRequest = new RabbitMQMockOutsideRequest();
+    private static final RabbitMQMockFakeRequest rabbitMQMockFakeRequest = new RabbitMQMockFakeRequest();
     private final Injector injector;
     private final ServletContext context;
 
@@ -38,9 +40,14 @@ public class ActionExecutor {
         boolean isLongRunning = true;
 
         if (isLongRunning) {
-            final RequestScoper requestScoper = ServletScopes.transferRequest();
+            // final RequestScoper requestScoper = ServletScopes.transferRequest();
+
+            rabbitMQMockFakeRequest.put("{}", requestAction);
             // rabbitMQMock.put(injector, "{}", requestAction, requestScoper);
-            rabbitMQMockOutsideRequest.put(injector, "{}", requestAction);
+
+            // rabbitMQMockOutsideRequest.put(injector, "{}", requestAction);
+
+
             //             TesteCallable testeCallable = new TesteCallable(new Req(injector, "{}", requestAction, requestScoper));
             //            ServletScopes.transferRequest(testeCallable);
         }
